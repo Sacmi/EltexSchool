@@ -1,15 +1,15 @@
 #!/bin/bash
 
-file="alice.txt"
+FILE="alice.txt"
 
-letters=$(grep -oP "[А-я]|\w" alice.txt | wc -l)
-echo "Количество букв в книге: $letters"
+LETTERS=$(grep -oP "[А-я]|\w" $FILE | wc -l)
+echo "Количество букв в книге: $LETTERS"
 
-words=$(cat alice.txt | wc -w)
-echo "Количество слов в книге: $words"
+WORDS=$(cat $FILE | wc -w)
+echo "Количество слов в книге: $WORDS"
 
-queen_sentence=$(grep -o -m 1 -E '[^\.]*Королев[а-яё]*[^\.]*\.' alice.txt)
-echo "Первое предложение, в котором упоминается Королева: $queen_sentence"
+QUEEN_SENTENCE=$(grep -o -m 1 -E '[^\.]*Королев[а-яё]*[^\.]*\.' $FILE)
+echo "Первое предложение, в котором упоминается Королева: $QUEEN_SENTENCE"
 
-tea_party=$(grep -o -E '(Шляпа)|(Заяц)|(Садовая Соня)' alice.txt | sort | uniq)
-echo "Участники чаепития: $tea_party"
+TEA_PARTY=$(grep -o -E '(Шляпа)|(Заяц)|(Садовая Соня)' $FILE | sort | uniq)
+echo "Участники чаепития: $TEA_PARTY"
