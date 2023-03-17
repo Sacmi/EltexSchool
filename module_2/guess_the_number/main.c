@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <assert.h>
+#include "reader.h"
 
 // Аналог макроса todo!() из Rust
 #define TODO assert(0 && "Not implemented")
@@ -24,15 +25,15 @@
 #define MIN_BET 10
 #define MAX_BET 1000
 
+#define MIN_DEPOSIT 100
+#define MIN_WITHDRAW 100
+
 typedef struct {
     char username[USER_NAME_MAX_LENGTH];
     unsigned int winCount;
     unsigned int lossCount;
     double balance;
 } UserStats;
-
-// TODO: заменить scanf на что-то безопасное
-// TODO: разбить на файлы
 
 void loadUserStatsFromFile(const char *filename, UserStats *userStats) {
     FILE *file = fopen(filename, "rb");
@@ -68,8 +69,13 @@ void dumpUserStatsToFile(const char *filename, const UserStats *userStats) {
 }
 
 void showUserStats(const UserStats *userStats) {
-    printf("Имя пользователя: %s\nКоличество побед: %d\nКоличество поражений: %d\nБаланс: %f\n",
-           userStats->username, userStats->winCount, userStats->lossCount, userStats->balance);
+    printf("Статистика пользователя %s:\n", userStats->username);
+    printf("Баланс: %.2lf\n", userStats->balance);
+    printf("Побед: %u\n", userStats->winCount);
+    printf("Поражений: %u\n", userStats->lossCount);
+    if (userStats->lossCount != 0) {
+        printf("Процент побед: %.2lf\n", (double) userStats->winCount / userStats->lossCount);
+    }
 }
 
 void showUsage(const char *programName) {
@@ -102,7 +108,7 @@ double calculateCoefficient(int tryCount, int interval) {
 }
 
 void initializeUserStats(UserStats *userStats) {
-    int length;
+    size_t length;
     char *buf = calloc(USER_NAME_MAX_LENGTH + 1, sizeof(char));
 
     do {
@@ -126,7 +132,27 @@ void initializeUserStats(UserStats *userStats) {
 }
 
 void deposit(UserStats *userStats) {
-    TODO;
+    printf("Пополнение баланса\n");
+    printf("Ваш баланс: %f\n", userStats->balance);
+    printf("Минимальная сумма пополнения: %d\n", MIN_DEPOSIT);
+    printf("Курс обмена: %d у.е. = %f к.\n", 1, SWAP_RATIO);
+    printf("\n");
+
+    double deposit;
+
+    while (1) {
+        deposit = readDouble("Введите сумму пополнения:");
+
+        if (deposit < MIN_DEPOSIT) {
+            printf("Ошибка: Сумма пополнения должна быть больше %d. Попробуйте еще раз.\n", MIN_DEPOSIT);
+        } else {
+            break;
+        }
+    }
+
+    userStats->balance += deposit * SWAP_RATIO;
+    printf("Баланс успешно пополнен!\n");
+    printf("Ваш баланс: %f\n", userStats->balance);
 }
 
 int randomInt(int from, int to) {
@@ -135,7 +161,7 @@ int randomInt(int from, int to) {
 
 void play(UserStats *userStats) {
     double bet;
-    int from, to, tryCount = 0;
+    int from, to, tryCount;
 
     printf("Игра: Угадай число\n");
     printf("Лимит ставки: от %d до %d\n", MIN_BET, MAX_BET);
@@ -145,11 +171,8 @@ void play(UserStats *userStats) {
     printf("Ваш баланс: %f\n", userStats->balance);
     printf("\n");
 
-    printf("Введите ставку:\n");
     do {
-        while (scanf("%lf", &bet) != 1) {
-            printf("Ошибка: Не удалось прочитать ставку. Попробуйте еще раз:\n");
-        }
+        bet = readDouble("Введите ставку:");
 
         if (bet < MIN_BET || bet > MAX_BET) {
             printf("Ошибка: Ставка должна быть от %d до %d. Попробуйте еще раз:\n", MIN_BET, MAX_BET);
@@ -161,27 +184,18 @@ void play(UserStats *userStats) {
         return;
     }
 
-    printf("Введите начало диапазона:\n");
-    while (scanf("%d", &from) != 1) {
-        printf("Ошибка: Не удалось прочитать начало диапазона. Попробуйте еще раз:\n");
-    }
+    from = readInt("Введите начало диапазона:");
 
-    printf("Введите конец диапазона:\n");
     do {
-        while (scanf("%d", &to) != 1) {
-            printf("Ошибка: Не удалось прочитать конец диапазона. Попробуйте еще раз:\n");
-        }
+        to = readInt("Введите конец диапазона:");
 
         if (to < from) {
             printf("Ошибка: Конец диапазона должен быть больше начала. Попробуйте еще раз:\n");
         }
     } while (to < from);
 
-    printf("Введите количество попыток:\n");
     do {
-        while (scanf("%d", &tryCount) != 1) {
-            printf("Ошибка: Не удалось прочитать количество попыток. Попробуйте еще раз:\n");
-        }
+        tryCount = readInt("Введите количество попыток:");
 
         if (tryCount < 1) {
             printf("Ошибка: Количество попыток должно быть больше 0. Попробуйте еще раз:\n");
@@ -196,12 +210,9 @@ void play(UserStats *userStats) {
     int number = randomInt(from, to);
     int guess;
 
-    for (int i = 0; i < tryCount; ++i) {
-        printf("Попытка %d из %d\n", i + 1, tryCount);
-        printf("Введите число:\n");
-        while (scanf("%d", &guess) != 1) {
-            printf("Ошибка: Не удалось прочитать число. Попробуйте еще раз:\n");
-        }
+    for (size_t i = 0; i < tryCount; ++i) {
+        printf("Попытка %zu из %d\n", i + 1, tryCount);
+        guess = readInt("Введите число:");
 
         if (guess == number) {
             printf("Вы угадали!\n");
@@ -234,7 +245,29 @@ void play(UserStats *userStats) {
 }
 
 void withdraw(UserStats *userStats) {
-    assert(0 && "Not implemented");
+    printf("Вывод средств\n");
+    printf("Ваш баланс: %f\n", userStats->balance);
+    printf("Минимальная сумма вывода: %d\n", MIN_WITHDRAW);
+    printf("Курс обмена: %d у.е. = %f к.\n", 1, SWAP_RATIO);
+    printf("\n");
+
+    double withdraw;
+
+    while (1) {
+        withdraw = readDouble("Введите сумму вывода:");
+
+        if (withdraw < MIN_WITHDRAW) {
+            printf("Ошибка: Сумма вывода должна быть больше %d. Попробуйте еще раз.\n", MIN_WITHDRAW);
+        } else if (withdraw > userStats->balance) {
+            printf("Ошибка: Недостаточно средств для вывода. Попробуйте еще раз.\n");
+        } else {
+            break;
+        }
+    }
+
+    userStats->balance -= withdraw * SWAP_RATIO;
+    printf("Средства успешно выведены!\n");
+    printf("Ваш баланс: %f\n", userStats->balance);
 }
 
 int main(int argc, char *argv[]) {
@@ -269,6 +302,8 @@ int main(int argc, char *argv[]) {
         showUsage(argv[0]);
         return 1;
     }
+
+    dumpUserStatsToFile(STATS_FILE, &userStats);
 
     return 0;
 }

@@ -3,4 +3,4 @@ project(guess_the_number C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(guess_the_number main.c)
+add_executable(guess_the_number main.c reader.c reader.h)
