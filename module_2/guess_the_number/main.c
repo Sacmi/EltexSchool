@@ -246,7 +246,8 @@ void play(UserStats *userStats) {
 
 void withdraw(UserStats *userStats) {
     printf("Вывод средств\n");
-    printf("Ваш баланс: %f\n", userStats->balance);
+    printf("Ваш баланс в кредитах: %f\n", userStats->balance);
+    printf("Ваш баланс в у.е.: %f\n", userStats->balance / SWAP_RATIO);
     printf("Минимальная сумма вывода: %d\n", MIN_WITHDRAW);
     printf("Курс обмена: %d у.е. = %f к.\n", 1, SWAP_RATIO);
     printf("\n");
@@ -254,7 +255,7 @@ void withdraw(UserStats *userStats) {
     double withdraw;
 
     while (1) {
-        withdraw = readDouble("Введите сумму вывода:");
+        withdraw = readDouble("Введите сумму вывода (в у.е.):");
 
         if (withdraw < MIN_WITHDRAW) {
             printf("Ошибка: Сумма вывода должна быть больше %d. Попробуйте еще раз.\n", MIN_WITHDRAW);
@@ -267,7 +268,8 @@ void withdraw(UserStats *userStats) {
 
     userStats->balance -= withdraw * SWAP_RATIO;
     printf("Средства успешно выведены!\n");
-    printf("Ваш баланс: %f\n", userStats->balance);
+    printf("Ваш баланс в кредитах: %f\n", userStats->balance);
+    printf("Ваш баланс в у.е.: %f\n", userStats->balance / SWAP_RATIO);
 }
 
 int main(int argc, char *argv[]) {
