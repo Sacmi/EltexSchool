@@ -34,11 +34,11 @@ void cleanList(LinkedList *list);
 
 // ---
 
-LinkedList *combineLists(LinkedList *left, LinkedList *right);
+LinkedList *combineLists(const LinkedList *left, const LinkedList *right);
 
-LinkedList *intersectArrays(LinkedList *left, LinkedList *right);
+LinkedList *intersectArrays(const LinkedList *left, const LinkedList *right);
 
-LinkedList *differenceList(LinkedList *left, LinkedList *right);
+LinkedList *differenceList(const LinkedList *left, const LinkedList *right);
 
 // ---
 

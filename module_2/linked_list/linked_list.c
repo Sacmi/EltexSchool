@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <assert.h>
-#include <time.h>
 #include "linked_list.h"
 
 #define TODO assert(0 && "Not Implemented")
@@ -140,8 +139,6 @@ void printList(const LinkedList *list) {
 }
 
 void generateList(size_t size, LinkedList *list) {
-    srand(time(NULL));
-
     for (size_t i = 0; i < size; ++i) {
         pushElement(rand() % RANDOM_RANGE, list);
     }
@@ -160,18 +157,26 @@ void cleanList(LinkedList *list) {
     list->tail = NULL;
 }
 
-LinkedList *combineLists(LinkedList *left, LinkedList *right) {
+LinkedList *combineLists(const LinkedList *left, const LinkedList *right) {
     LinkedList *newList = createEmptyList();
-    newList->head = left->head;
-    newList->tail = right->tail;
+    Node *currentNodeLeft = left->head;
 
-    left->tail->next = right->head;
-    left->tail = right->tail;
+    while (currentNodeLeft != NULL) {
+        pushElement(currentNodeLeft->value, newList);
+        currentNodeLeft = currentNodeLeft->next;
+    }
+
+    Node *currentNodeRight = right->head;
+
+    while (currentNodeRight != NULL) {
+        pushElement(currentNodeRight->value, newList);
+        currentNodeRight = currentNodeRight->next;
+    }
 
     return newList;
 }
 
-LinkedList *intersectArrays(LinkedList *left, LinkedList *right) {
+LinkedList *intersectArrays(const LinkedList *left, const LinkedList *right) {
     LinkedList *newList = createEmptyList();
     Node *currentNodeLeft = left->head;
 
@@ -192,7 +197,7 @@ LinkedList *intersectArrays(LinkedList *left, LinkedList *right) {
     return newList;
 }
 
-LinkedList *differenceList(LinkedList *left, LinkedList *right) {
+LinkedList *differenceList(const LinkedList *left, const LinkedList *right) {
     LinkedList *newList = createEmptyList();
     Node *currentNodeLeft = left->head;
 
@@ -214,6 +219,28 @@ LinkedList *differenceList(LinkedList *left, LinkedList *right) {
         }
 
         currentNodeLeft = currentNodeLeft->next;
+    }
+
+    Node *currentNodeRight = right->head;
+
+    while (currentNodeRight != NULL) {
+        int isFound = 0;
+        currentNodeLeft = left->head;
+
+        while (currentNodeLeft != NULL) {
+            if (currentNodeRight->value == currentNodeLeft->value) {
+                isFound = 1;
+                break;
+            }
+
+            currentNodeLeft = currentNodeLeft->next;
+        }
+
+        if (!isFound) {
+            pushElement(currentNodeRight->value, newList);
+        }
+
+        currentNodeRight = currentNodeRight->next;
     }
 
     return newList;

@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "linked_list.h"
 
 int main() {
+    srand(time(NULL));
+
     LinkedList linkedList = {.head = NULL, .tail = NULL};
     generateList(10, &linkedList);
 
@@ -34,6 +37,8 @@ int main() {
     cleanList(&linkedList);
     printList(&linkedList);
 
+    printf("\n --- \n");
+
     LinkedList left = {.head = NULL, .tail = NULL};
     LinkedList right = {.head = NULL, .tail = NULL};
 
@@ -41,20 +46,25 @@ int main() {
     generateList(10, &right);
 
     printf("Left list: ");
+    sortUp(&left);
     printList(&left);
     printf("Right list: ");
+    sortUp(&right);
     printList(&right);
 
     LinkedList *combined = combineLists(&left, &right);
     printf("Combined list: ");
+    sortUp(combined);
     printList(combined);
 
     LinkedList *intersected = intersectArrays(&left, &right);
     printf("Intersected list: ");
+    sortUp(intersected);
     printList(intersected);
 
     LinkedList *difference = differenceList(&left, &right);
     printf("Difference list: ");
+    sortUp(difference);
     printList(difference);
 
     cleanList(combined);
@@ -64,6 +74,8 @@ int main() {
     free(combined);
     free(intersected);
     free(difference);
+
+    printf("\n --- \n");
 
     generateList(10, &linkedList);
     printf("Unsorted list: ");
