@@ -1,0 +1,7 @@
+*
+!*.c
+!Makefile
+!README.md
+!.gitignore
+!run.sh
+!Output.md
