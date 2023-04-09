@@ -6,9 +6,10 @@
 #define FILENAME_SIZE 20
 
 int main() {
-RBNode *tree = NULL;
     char *header = "digraph G {\n";
     char *footer = "}\n";
+
+    RBNode *tree = NULL;
 
     for (int i = 5; i <= 30; i = i + 5) {
         printf("Inserting %d\n", i);
@@ -18,6 +19,7 @@ RBNode *tree = NULL;
 
         char filename[FILENAME_SIZE];
         sprintf(filename, "tree_%d.dot", i);
+
         FILE *file = fopen(filename, "w");
         if (file == NULL) {
             perror("fopen");

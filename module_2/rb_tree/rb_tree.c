@@ -48,6 +48,7 @@ void rotate_right(RBNode** tree, RBNode* node) {
     node->parent = left;
 }
 
+// Источник - https://neerc.ifmo.ru/wiki/index.php?title=Красно-черное_дерево
 void fix_insertion(RBNode** tree, RBNode* node) {
     while (node->parent != NULL && node->parent->color == RED) {
         RBNode* parent = node->parent;
