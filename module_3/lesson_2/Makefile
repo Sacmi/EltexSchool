@@ -1,23 +1,30 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-all: counter
+PROGS = counter counter_pass counter_three_times \
+ counter_print counter_file random sv_reader sv_writer \
+ sv_chat sv_server sv_client p_reader p_writer p_chat \
+ p_client p_server
 
-counter: counter.c
-	$(CC) $(CFLAGS) -o $@ $<
+all: $(PROGS)
 
-counter_pass: counter_pass.c
-	$(CC) $(CFLAGS) -o $@ $<
+p_reader: p_reader.c
+	$(CC) $(CFLAGS) -lrt -o $@ $<
 
-counter_three_times: counter_three_times.c
-	$(CC) $(CFLAGS) -o $@ $<
+p_writer: p_writer.c
+	$(CC) $(CFLAGS) -lrt -o $@ $<
 
-counter_print: counter_print.c
-	$(CC) $(CFLAGS) -o $@ $<
+p_chat: p_chat.c
+	$(CC) $(CFLAGS) -lrt -o $@ $<
 
-counter_file: counter_file.c
+p_client: p_client.c
+	$(CC) $(CFLAGS) -lrt -o $@ $<
+
+p_server: p_server.c
+	$(CC) $(CFLAGS) -lrt -o $@ $<
+
+%: %.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f counter counter_pass counter_three_times \
-		  counter_print counter_file
+	rm -f $(PROGS)
