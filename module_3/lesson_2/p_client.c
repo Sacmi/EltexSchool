@@ -5,7 +5,7 @@
 #include <mqueue.h>
 
 #define Q_SERVER "/server"
-#define MSG_SIZE 100
+#define MSG_SIZE 256
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
             exit(1);
         case 0:
             while (1) {
-                if (mq_receive(ds_r, message, MSG_SIZE, NULL) == -1) {
+                if (mq_receive(ds_r, message, sizeof(message), NULL) == -1) {
                     perror("mq_receive");
                     exit(1);
                 }

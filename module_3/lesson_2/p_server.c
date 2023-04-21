@@ -1,7 +1,6 @@
 #include <mqueue.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define Q_SERVER "/server"
 #define MSG_SIZE 256
@@ -48,7 +47,7 @@ int main() {
             clients[prio] = ds_c;
         }
 
-        printf("Получено сообщение от клиента %d\n", prio);
+        printf("Получено сообщение от клиента %d - %s\n", prio, buf);
 
         for (int i = 0; i < MAX_CLIENTS; ++i) {
             mqd_t client = clients[i];
@@ -57,7 +56,7 @@ int main() {
                 continue;
             }
 
-            if (mq_send(client, buf, strlen(buf), 1) == -1) {
+            if (mq_send(client, buf, MSG_SIZE - 1, 1) == -1) {
                 perror("mq_send");
                 exit(1);
             }
