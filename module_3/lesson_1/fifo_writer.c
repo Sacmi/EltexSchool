@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
-#include <sys/stat.h>
 
 #define FIFO_PATH "/tmp/my_fifo"
 #define LIMIT 100
@@ -18,14 +17,14 @@ int generate_rng() {
 int main() {
     int fd_fifo;
 
-    unlink(FIFO_PATH);
+//    unlink(FIFO_PATH);
 
-    if (mkfifo(FIFO_PATH, O_RDWR) == -1) {
-        perror("mkfifo");
-        exit(EXIT_FAILURE);
-    }
+    //if (mkfifo(FIFO_PATH, 0644) == -1) {
+    //    perror("mkfifo");
+    //    exit(EXIT_FAILURE);
+    //}
 
-    if ((fd_fifo = open(FIFO_PATH, O_WRONLY)) == -1) {
+    if ((fd_fifo = open(FIFO_PATH, O_APPEND | O_WRONLY)) == -1) {
         perror("open");
         exit(EXIT_FAILURE);
     }
