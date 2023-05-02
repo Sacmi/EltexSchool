@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define QUEUE "/ya_pidoras"
+#define QUEUE "/brand_new_queue"
 #define MSG_SIZE 255
 
 int main(void) {
