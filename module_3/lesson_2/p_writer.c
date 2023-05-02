@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define QUEUE "/ya_pidoras"
+#define QUEUE "/brand_new_queue"
 #define MSG_SIZE 256
 #define MSG_PRIORITY 1
 #define END_PRIORITY 255
