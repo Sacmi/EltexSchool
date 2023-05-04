@@ -9,7 +9,7 @@
 
 #define FIFO_PATH "/tmp/my_fifo"
 #define SEM_KEY 1234
-#define LIMIT 100
+#define LIMIT 5
 
 #define MY_RAND_MIN 0
 #define MY_RAND_MAX 100
