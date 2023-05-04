@@ -2,8 +2,11 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 all: fork square myshell unbuf_reader unbuf_writer \
- buf_reader buf_writer random fifo_reader fifo_writer
+ buf_reader buf_writer random fifo_reader fifo_writer \
+ syscalls
 
+syscalls: syscalls.c
+	$(CC) $(CFLAGS) -o $@ $<
 fork: fork.c
 	$(CC) $(CFLAGS) -o $@ $<
 square: square.c
@@ -29,4 +32,4 @@ fifo_writer: fifo_writer.c
 
 clean:
 	rm -f fork square myshell unbuf_reader unbuf_writer buf_reader buf_writer \
-		random pipeshell fifo_reader fifo_writer
+		random pipeshell fifo_reader fifo_writer syscalls
