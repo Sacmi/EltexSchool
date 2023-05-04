@@ -9,6 +9,9 @@ EXECUTABLES = $(SOURCES:.c=.o)
 
 all: $(EXECUTABLES)
 
+4.4/sender.o: 4.4/sender.c
+	$(CC) $(CFLAGS) -lm $< -o $@
+
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
 
