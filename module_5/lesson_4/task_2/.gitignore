@@ -1,0 +1,4 @@
+*.so
+*_example
+*.o
+*.a
